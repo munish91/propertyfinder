@@ -1,7 +1,8 @@
 export function convertToSerializableObject(leanDocument){
        for(const key of Object.keys(leanDocument)){
-        if(leanDocument[key].toJSON && leanDocument[key].toString){
-            leanDocument[key] = leanDocument[key].toString()
+        const value = leanDocument[key];
+        if(value && typeof value.toJSON === 'function' && typeof value.toString === 'function'){
+            leanDocument[key] = value.toString()
         }
        }
        return leanDocument
