@@ -1,8 +1,12 @@
 import PropertyCard from '@/components/PropertyCard'
+import Property from '@/models/Property';
 import { fetchProperties } from '@/utils/requests';
-const PropertiesPage = async() => {
-  const properties = await fetchProperties();
-
+import { Pagination } from '@/components/Pagination'
+const PropertiesPage = async({searchParams:{page = 1,pageSize=2}}) => {
+  // const properties = await fetchProperties();
+  const skip = (page -1 )* pageSize;
+  const total = await Property.countDocuments({})
+  const properties = await Property.find({}).skip(skip).limit(pageSize);
   // Sort properties by date
   properties.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
   return (
@@ -20,6 +24,7 @@ const PropertiesPage = async() => {
             )}
         </div>
         )}
+        {/* <Pagination /> */}
       </div>
     </section>
   )
